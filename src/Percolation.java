@@ -4,8 +4,7 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 public class Percolation {
 
     private boolean[] siteOpenStates;
-    private boolean[] siteLinkToTopStates;
-    private boolean[] siteLinkToBottomStates;
+    private boolean[] siteRootLinkToBottomStates;
     private int gridSize;
     private int gridTotalSize;
 
@@ -19,15 +18,16 @@ public class Percolation {
 
         gridSize = N;
         gridTotalSize = gridSize * gridSize;
-        siteOpenStates = new boolean[gridTotalSize + 1];
-        siteFullStates = new boolean[gridTotalSize + 1];
+        siteOpenStates = new boolean[gridTotalSize];
+        siteRootLinkToBottomStates = new boolean[gridTotalSize + 1];
 
-        for (int i = 0; i < gridTotalSize + 1; i++) {
+        for (int i = 0; i < gridTotalSize; i++) {
             siteOpenStates[i] = false;
-            siteFullStates[i] = false;
+            siteRootLinkToBottomStates[i] = false;
         }
+        siteRootLinkToBottomStates[gridTotalSize] = false;
 
-        wqu = new WeightedQuickUnionUF(1 + gridTotalSize);
+        wqu = new WeightedQuickUnionUF(gridTotalSize + 1);
 
     }
 
@@ -39,49 +39,62 @@ public class Percolation {
 
     private int ijTo1D(int i, int j) {
         validate(i, j);
-        return ((i - 1) * gridSize + j);
+        return ((i - 1) * gridSize + j - 1);
+    }
+
+    private boolean isLinkToBottom(int p) {
+        return siteRootLinkToBottomStates[wqu.find(p)];
+    }
+
+    private void union(int p, int q) {
+        if (isLinkToBottom(p) || isLinkToBottom(q)) {
+            siteRootLinkToBottomStates[wqu.find(p)] = true;
+            siteRootLinkToBottomStates[wqu.find(q)] = true;
+        }
+
+        wqu.union(p, q);
     }
 
     // mark (i, j)th site as open and link it to neighbour open sites
     public void open(int i, int j) {
         siteOpenStates[ijTo1D(i, j)] = true;
 
+        if (i == gridSize)
+            siteRootLinkToBottomStates[ijTo1D(i, j)] = true;
+
         // union the (i, j)th site with neighbour open sites.
-        // wqu and wqu1 first row link to the source site indexed as 0;
+        // update the site states whether link to bottom.
+
+        // top row link to the source site indexed as 0;
         if (i == 1) {
-            wqu.union(ijTo1D(i, j), 0);
+            union(ijTo1D(i, j), gridTotalSize);
         }
 
-        
-        int sourceRoot = wqu.find(0);
-        
         // link to the site above;
         if (i > 1) {
             if (isOpen(i - 1, j)) {
-                wqu.union(ijTo1D(i, j), ijTo1D(i - 1, j));
+                union(ijTo1D(i, j), ijTo1D(i - 1, j));
             }
         }
         // link to the site below;
         if (i < gridSize) {
             if (isOpen(i + 1, j)) {
-                wqu.union(ijTo1D(i, j), ijTo1D(i + 1, j));
+                union(ijTo1D(i, j), ijTo1D(i + 1, j));
             }
         }
         // link to the site on the left;
         if (j > 1) {
             if (isOpen(i, j - 1)) {
-                wqu.union(ijTo1D(i, j), ijTo1D(i, j - 1));
+                union(ijTo1D(i, j), ijTo1D(i, j - 1));
             }
         }
         // link to the site on the right;
         if (j < gridSize) {
             if (isOpen(i, j + 1)) {
-                wqu.union(ijTo1D(i, j), ijTo1D(i, j + 1));
+                union(ijTo1D(i, j), ijTo1D(i, j + 1));
             }
         }
-        
-        
-        
+
     }
 
     // is site (row i, column j) open?
@@ -91,12 +104,12 @@ public class Percolation {
 
     // is site (row i, column j) full?
     public boolean isFull(int i, int j) {
-        return siteFullStates[ijTo1D(i, j)];
+        return wqu.connected(ijTo1D(i, j), gridTotalSize);
     }
 
     // does the system percolate?
     public boolean percolates() {
-        return wqu.connected(0, gridTotalSize + 1);
+        return siteRootLinkToBottomStates[wqu.find(gridTotalSize)];
     }
 
     public static void main(String[] args) {
