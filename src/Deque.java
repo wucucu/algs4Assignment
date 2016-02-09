@@ -12,7 +12,7 @@ public class Deque<Item> implements Iterable<Item> {
     private Node<Item> tailSentinel;
 
     // doubly linked node
-    private class Node<Item> {
+    private static class Node<Item> {
         private Item item;
         // successor
         private Node<Item> succ;
@@ -80,7 +80,7 @@ public class Deque<Item> implements Iterable<Item> {
         N--;
 
         Item item = headSentinel.succ.item;
-        headSentinel.succ = headSentinel.succ.succ;
+        headSentinel = headSentinel.succ;
 
         // avoid loitering
         headSentinel.item = null;
@@ -110,7 +110,7 @@ public class Deque<Item> implements Iterable<Item> {
         return new DequeIterator();
     }
 
-    public class DequeIterator implements Iterator<Item> {
+    private class DequeIterator implements Iterator<Item> {
         private Node<Item> current;
 
         public DequeIterator() {
@@ -137,13 +137,28 @@ public class Deque<Item> implements Iterable<Item> {
 
     }
 
+    
+    private void printq(){
+        for (Item item : this){
+            StdOut.print(item+" ");
+            StdOut.println();
+        }
+    }
+    
     public static void main(String[] args) {
         Deque<Integer> dq = new Deque<Integer>();
-        for (String s : args) {
-            Integer item = Integer.parseInt(s);
-            dq.addLast(item);
-        }
-        for (Integer item : dq)
-            StdOut.print(item + " ");
+        
+        dq.addFirst(0);
+        //dq.printq();
+        
+        StdOut.println(dq.removeFirst());
+        //dq.printq();
+        
+        dq.addLast(2);
+        //dq.printq();
+
+        StdOut.println(dq.removeFirst());
+        //dq.printq();
+
     }
 }
