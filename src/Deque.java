@@ -116,7 +116,7 @@ public class Deque<Item> implements Iterable<Item> {
         public DequeIterator() {
             current = headSentinel.succ;
         }
-        
+
         public boolean hasNext() {
             return current.succ != null;
         }
@@ -124,10 +124,10 @@ public class Deque<Item> implements Iterable<Item> {
         public Item next() {
             if (!hasNext())
                 throw new NoSuchElementException();
-            
+
             Item item = current.item;
             current = current.succ;
-            
+
             return item;
         }
 
@@ -137,28 +137,27 @@ public class Deque<Item> implements Iterable<Item> {
 
     }
 
-    
-    private void printq(){
-        for (Item item : this){
-            StdOut.print(item+" ");
+    private void printq() {
+        for (Item item : this) {
+            StdOut.print(item + " ");
             StdOut.println();
         }
     }
-    
+
     public static void main(String[] args) {
         Deque<Integer> dq = new Deque<Integer>();
-        
+
         dq.addFirst(0);
-        //dq.printq();
-        
-        StdOut.println(dq.removeFirst());
-        //dq.printq();
-        
-        dq.addLast(2);
-        //dq.printq();
+        // dq.printq();
 
         StdOut.println(dq.removeFirst());
-        //dq.printq();
+        // dq.printq();
+
+        dq.addLast(2);
+        // dq.printq();
+
+        StdOut.println(dq.removeFirst());
+        // dq.printq();
 
     }
 }

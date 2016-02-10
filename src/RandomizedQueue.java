@@ -75,8 +75,9 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
     // return a item randomly
     public Item sample() {
-        if (N == 0) throw new NullPointerException();
-        return q[(first + StdRandom.uniform(N)) % N];
+        if (N == 0)
+            throw new NoSuchElementException();
+        return q[(first + StdRandom.uniform(N)) % q.length];
     }
 
     // return an independent iterator over items in random order
