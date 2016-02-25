@@ -49,10 +49,14 @@ public class PuzzleChecker {
             Board initial = new Board(tiles);
             Solver solver = new Solver(initial);
             StdOut.println(filename + ": " + solver.moves());
-            if (solver.isSolvable())
+            if (solver.isSolvable()){
+                int k = 0;
                 for (Board board : solver.solution()) {
+                    StdOut.println(String.format("%d,%d", k, k + board.manhattan()));
                     StdOut.println(board);
+                    k++;
                 }
+            }
         }
     }
 }

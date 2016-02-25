@@ -126,9 +126,9 @@ public class Board {
 
         if (newBoard.block[i] == 0) {
             z = i;
-            h = h - isOutOfPlace(i, this.block[i]); 
+            h = h - isOutOfPlace(i, this.block[i]);
             h = h + isOutOfPlace(j, newBoard.block[j]);
-            
+
             m = m - manhattanDistance(currentIndex2DPosition(i), goal2DPosition(this.block[i]));
             m = m + manhattanDistance(currentIndex2DPosition(j), goal2DPosition(newBoard.block[j]));
 
@@ -136,16 +136,16 @@ public class Board {
             z = j;
             h = h - isOutOfPlace(j, this.block[j]);
             h = h + isOutOfPlace(i, newBoard.block[i]);
-            
+
             m = m - manhattanDistance(currentIndex2DPosition(j), goal2DPosition(this.block[j]));
             m = m + manhattanDistance(currentIndex2DPosition(i), goal2DPosition(newBoard.block[i]));
 
         } else {
-            h = h - isOutOfPlace(i, this.block[i]); 
+            h = h - isOutOfPlace(i, this.block[i]);
             h = h - isOutOfPlace(j, this.block[j]);
             h = h + isOutOfPlace(i, newBoard.block[i]);
             h = h + isOutOfPlace(j, newBoard.block[j]);
-            
+
             m = m - manhattanDistance(currentIndex2DPosition(i), goal2DPosition(this.block[i]));
             m = m - manhattanDistance(currentIndex2DPosition(j), goal2DPosition(this.block[j]));
             m = m + manhattanDistance(currentIndex2DPosition(i), goal2DPosition(newBoard.block[i]));
@@ -189,7 +189,7 @@ public class Board {
             return false;
         if (that.sumOfManhattanDistance != this.sumOfManhattanDistance)
             return false;
-        for (int i = 0; i < this.N; i++) {
+        for (int i = 0; i < this.block.length; i++) {
             if (that.block[i] != this.block[i])
                 return false;
         }
@@ -256,10 +256,10 @@ public class Board {
             StdOut.println(board.hamming() + " " + board.manhattan());
             StdOut.println(board);
         }
-        
-        StdOut.println(initial.twin().hamming()+" "+initial.twin().manhattan());
+
+        StdOut.println(initial.twin().hamming() + " " + initial.twin().manhattan());
         StdOut.println(initial.twin());
-        
+
         StdOut.println(new Board(initial).twin().equals(initial));
     }
 

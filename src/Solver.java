@@ -32,7 +32,10 @@ public class Solver {
                 return 1;
             if (manhattanPriority() < o.manhattanPriority())
                 return -1;
-
+            if (this.board.manhattan() > o.board.manhattan())
+                return 1;
+            if (this.board.manhattan() < o.board.manhattan())
+                return -1;
             return 0;
         }
 
@@ -64,29 +67,34 @@ public class Solver {
             currentSearchNode = onHandNodesMinPQ.delMin();
             if (currentSearchNode.board.isGoal())
                 break;
-            Board previousBoard = (currentSearchNode.previous == null) ? null : currentSearchNode.previous.board;
+            Board previousBoard = null;
+            if (currentSearchNode.previous != null)
+                previousBoard = currentSearchNode.previous.board;
+
             for (Board board : currentSearchNode.board.neighbors()) {
-                if (!board.equals(previousBoard))
-                    onHandNodesMinPQ.insert(currentSearchNode.nextNode(board));
+                if (board.equals(previousBoard))
+                    continue;
+                onHandNodesMinPQ.insert(currentSearchNode.nextNode(board));
             }
+
         }
 
         // determine solvable by checking whether the first node is initial
         // board or not(the twin in the not case)
         SearchNode goalSearchNode = currentSearchNode;
-        
+
         while (currentSearchNode.previous != null) {
             solutionStack.push(currentSearchNode.board);
             currentSearchNode = currentSearchNode.previous;
         }
-        
+
         solutionStack.push(currentSearchNode.board);
-        
+
         if (currentSearchNode.board.equals(initial)) {
             solvableFlag = true;
             solutionMoves = goalSearchNode.move;
         }
-        
+
     }
 
     // is the initial board solvable?
