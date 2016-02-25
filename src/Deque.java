@@ -1,7 +1,6 @@
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import edu.princeton.cs.algs4.StdIn;
 import edu.princeton.cs.algs4.StdOut;
 
 // a double-ended queue generalizing a stack and a queue
@@ -135,13 +134,6 @@ public class Deque<Item> implements Iterable<Item> {
             throw new UnsupportedOperationException();
         }
 
-    }
-
-    private void printq() {
-        for (Item item : this) {
-            StdOut.print(item + " ");
-            StdOut.println();
-        }
     }
 
     public static void main(String[] args) {

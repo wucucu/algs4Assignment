@@ -10,6 +10,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     private int first;
     private int last;
 
+    @SuppressWarnings("unchecked")
     public RandomizedQueue() {
         q = (Item[]) new Object[1];
         N = 0;
@@ -27,6 +28,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
     private void resize(int max) {
         assert max >= N;
+        @SuppressWarnings("unchecked")
         Item[] temp = (Item[]) new Object[max];
         for (int i = 0; i < N; i++) {
             temp[i] = q[(first + i) % q.length];
